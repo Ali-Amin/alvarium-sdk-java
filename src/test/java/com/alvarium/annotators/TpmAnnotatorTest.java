@@ -46,10 +46,9 @@ public class TpmAnnotatorTest {
     final SdkInfo config = new SdkInfo(annotators, new HashInfo(HashType.MD5Hash), sign, null);
     Annotator tpm = factory.getAnnotator(AnnotationType.TPM, config);
 
-    PropertyBag ctx = new ImmutablePropertyBag(Map.of("pipelineId", "pipelineId/1"));
 
     byte[] data = { 0x1, 0x2 };
-    Annotation annotation = tpm.execute(ctx, data);
+    Annotation annotation = tpm.execute(data);
     System.out.println(annotation.toJson());
   }
 
