@@ -25,10 +25,14 @@ import com.alvarium.sign.KeyInfo;
 import com.alvarium.sign.SignType;
 import com.alvarium.sign.SignatureInfo;
 import com.alvarium.utils.ImmutablePropertyBag;
+import com.alvarium.utils.LoggerSingleton;
 import com.alvarium.utils.PropertyBag;
+import com.alvarium.utils.LoggerSingleton.LoggerSingletonOptions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -36,6 +40,12 @@ import static org.junit.Assert.assertTrue;
 
 public class PkiAnnotatorTest {
 
+  @Test
+  public void testLoggerOutput() {
+    Logger logger = LogManager.getRootLogger();
+    LoggerSingletonOptions.setLogger(logger);
+    LoggerSingleton.getInstance().error("foo");
+  }
   
 
   @Test

@@ -29,7 +29,9 @@ import com.alvarium.streams.StreamException;
 import com.alvarium.streams.StreamProvider;
 import com.alvarium.streams.StreamProviderFactory;
 import com.alvarium.utils.ImmutablePropertyBag;
+import com.alvarium.utils.LoggerSingleton;
 import com.alvarium.utils.PropertyBag;
+import com.alvarium.utils.LoggerSingleton.LoggerSingletonOptions;
 
 import org.apache.logging.log4j.Logger;
 
@@ -42,7 +44,8 @@ public class DefaultSdk implements Sdk {
   public DefaultSdk(Annotator[] annotators, SdkInfo config, Logger logger) throws StreamException {
     this.annotators = annotators;
     this.config = config;
-    this.logger = logger;
+    LoggerSingletonOptions.setLogger(logger);
+    this.logger = LoggerSingleton.getInstance();
 
     // init stream
     final StreamProviderFactory streamFactory = new StreamProviderFactory();

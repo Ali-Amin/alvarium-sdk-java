@@ -22,6 +22,7 @@ import com.alvarium.contracts.Annotation;
 import com.alvarium.contracts.AnnotationType;
 import com.alvarium.hash.HashType;
 import com.alvarium.sign.SignatureInfo;
+import com.alvarium.utils.LoggerSingleton;
 import com.alvarium.utils.PropertyBag;
 
 class PkiAnnotator extends AbstractPkiAnnotator implements Annotator {
@@ -42,6 +43,7 @@ class PkiAnnotator extends AbstractPkiAnnotator implements Annotator {
     try {
       host = InetAddress.getLocalHost().getHostName();
     } catch (UnknownHostException e) {
+      LoggerSingleton.getInstance().error("Error during PkiAnnotator execution: ",e);
       throw new AnnotatorException("Cannot get host name", e);
     }  
 
