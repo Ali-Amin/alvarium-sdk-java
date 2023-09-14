@@ -6,7 +6,7 @@ pipeline {
         maven 'M3'
     }
     stages {
-        stage('prep - generate Source Code Checksum') {
+        stage('prep - generate source code checksum') {
             steps {
                 sh 'mkdir -p $JENKINS_HOME/jobs/$JOB_NAME/$BUILD_NUMBER/'
                 sh '''find . -type f -exec md5sum {} + |\
@@ -28,9 +28,9 @@ pipeline {
             }
         }
 
-        stage('Alvarium - Pre-build annotations') {
+        stage('alvarium - pre-build annotations') {
             steps {
-                alvariumAnnotate(['source-code', 'vulnerability'])
+                alvariumCreate(['source-code', 'vulnerability'])
             }
         }
 
@@ -58,7 +58,10 @@ pipeline {
                     // being fetched from the file system instead of a persistent
                     // store
                     // TODO (Ali Amin): Find a way to persist the checksum
-                    alvariumAnnotate(['checksum'], 'target/alvarium-sdk-1.0-SNAPSHOT.jar')
+                    script {
+                        def artifactChecksum = readFile "/${JENKINS_HOME}/jobs/${JOB_NAME}/${BUILD_NUMBER}/alvarium-sdk-1.0-SNAPSHOT.jar.checksum" 
+                        alvariumMutate(['checksum'], '${WORKSPACE}/target/alvarium-sdk-1.0-SNAPSHOT.jar', artifactChecksum.bytes)
+                    }   
                 }
             }
         }
