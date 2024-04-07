@@ -81,16 +81,20 @@ public class SpdxSbomProvider implements SbomProvider {
       if (creator == null) {
         throw new SbomException("SPDX creator info cannot be empty");
       }
+      
+      String path = String.format("spdx/%d", System.currentTimeMillis());
+      new File(path).mkdirs();
 
       String supplierName = creator.split(" ")[1];
       String sbomLocation = ".";
       String cmd = String.format(
-          "sbom-tool generate -b %s -bc %s -nsb http://alvarium.com -pn %s -pv %s -ps %s -D true", 
+          "sbom-tool generate -b %s -bc %s -nsb http://alvarium.com -pn %s -pv %s -ps %s -D true -m %s", 
           sbomLocation, 
           sourceCodeRootDirPath, 
           pkgName,
           pkgVersion,
-          supplierName
+          supplierName,
+          path
       );
       Process sbomGenerationProcess = Runtime.getRuntime().exec(cmd);
       int exitCode = sbomGenerationProcess.waitFor();
@@ -98,7 +102,7 @@ public class SpdxSbomProvider implements SbomProvider {
         throw new SbomException("SBoM generation failed with exit code " + exitCode);
       }
 
-      SpdxDocument generatedSbom = this.deserializeSpdxFile("_manifest/spdx_2.2/manifest.spdx.json", modelStore);
+      SpdxDocument generatedSbom = this.deserializeSpdxFile(path + "/_manifest/spdx_2.2/manifest.spdx.json", modelStore);
       SpdxComparer comparer = new SpdxComparer();
       comparer.compare(originalSbom, generatedSbom);
       boolean isBuildMissingPkg = comparer.getUniquePackages(1, 0).size() != 0;
@@ -111,7 +115,7 @@ public class SpdxSbomProvider implements SbomProvider {
     } catch(SpdxCompareException e) {
       return false;
     } catch (IOException e) {
-      throw new SbomException("Could not read source code SBoM", e);
+      throw new SbomException(" source code SBoM", e);
     } catch (InterruptedException e) {
       throw new SbomException("Could not read source code SBoM", e);
     } catch (Exception e) {

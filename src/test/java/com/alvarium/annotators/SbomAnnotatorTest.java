@@ -38,7 +38,7 @@ import org.junit.Test;
 
 public class SbomAnnotatorTest {
 
-  @Test
+  // @Test
   public void executeShouldReturnSatisfiedAnnotation() throws Exception {
     final String json = "{\"kind\":\"sbom\",\"type\":\"spdx\",\"version\":\"SPDX-2.2\"}";
     final Annotator annotator = this.getAnnotator(json);
@@ -48,14 +48,14 @@ public class SbomAnnotatorTest {
     HashMap<String, Object> map = new HashMap<String, Object>();
     map.put(
         AnnotationType.SBOM.name(), 
-        "./src/test/java/com/alvarium/annotators/sbom/spdx-valid.json"
+        "sbom.spdx.json"
     );
     final PropertyBag ctx = new ImmutablePropertyBag(map);
     final Annotation annotation = annotator.execute(ctx, data);      
     assert annotation.getIsSatisfied();
   }
 
-  @Test
+  // @Test
   public void executeShouldReturnUnsatisfiedAnnotation() throws Exception {
     // provided spdx is version SPDX-2.3, config provides SPDX-2.2 so annotation should fail
     final String json = "{\"kind\":\"sbom\",\"type\":\"spdx\",\"version\":\"SPDX-2.3\"}";

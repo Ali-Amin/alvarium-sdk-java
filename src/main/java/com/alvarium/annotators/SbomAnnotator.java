@@ -55,18 +55,22 @@ public class SbomAnnotator extends AbstractAnnotator implements Annotator {
       this.logger.error("Error during SbomAnnotator execution: ",e);
     }
     
+    final String filePath; 
     boolean isSatisfied = false;
     try {
       final SbomProvider sbom = new SbomProviderFactory().getProvider(this.cfg, this.logger);
-      final String filePath = ctx.getProperty(AnnotationType.SBOM.name(), String.class);
-      boolean isValid = sbom.validate(filePath);
+      filePath = ctx.getProperty(AnnotationType.SBOM.name(), String.class);
       boolean exists = sbom.exists(filePath);
+      boolean isValid = sbom.validate(filePath);
       boolean matchesBuild = sbom.matchesBuild(filePath, ".");
-      isSatisfied = isValid && exists && matchesBuild;
+      isSatisfied = exists && isValid && matchesBuild;
     } catch (SbomException e) {
       this.logger.error("Error during SbomAnnotator execution: ", e);
+      throw new AnnotatorException("here", e);
     } catch (Exception e) {
       this.logger.error("Error during SbomAnnotator execution: ", e);
+      throw new AnnotatorException("there", e);
+
     }
     
     final Annotation annotation = new Annotation(
