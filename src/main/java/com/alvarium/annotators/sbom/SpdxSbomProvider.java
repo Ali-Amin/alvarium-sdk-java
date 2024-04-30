@@ -115,7 +115,7 @@ public class SpdxSbomProvider implements SbomProvider {
     } catch(SpdxCompareException e) {
       return false;
     } catch (IOException e) {
-      throw new SbomException(" source code SBoM", e);
+      throw new SbomException("Could not read source code SBoM", e);
     } catch (InterruptedException e) {
       throw new SbomException("Could not read source code SBoM", e);
     } catch (Exception e) {

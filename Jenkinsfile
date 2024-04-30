@@ -1,4 +1,4 @@
-@Library('alvarium-pipelines-ali@sbom-test') _
+@Library('alvarium-pipelines') _
 
 pipeline {
     agent any
@@ -17,23 +17,13 @@ pipeline {
         //     }
         // }
 
-        stage('test') {
-            steps {
-                sh 'mvn test'
-            }
-            post {
-                success {
-                    junit 'target/surefire-reports/**/*.xml'
-                }
-            }
-        }
+
 
         stage('alvarium - pre-build annotations') {
             steps {
                 script{
-                    def optionalParams = ['sbomPath':"${WORKSPACE}/sbom.spdx.json"]
-                    echo "${WORKSPACE}/sbom.spdx.json"
-                    alvariumCreate(['sbom'], optionalParams)
+                    def optionalParams = ['sourceCodeChecksumPath':"${JENKINS_HOME}/jobs/${JOB_NAME}/${BUILD_NUMBER}/sc_checksum"]
+                    alvariumCreate(['source-code'], optionalParams)
                 }
             }
         }
