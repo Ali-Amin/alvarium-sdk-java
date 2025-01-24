@@ -67,7 +67,7 @@ class SourceCodeAnnotator extends AbstractAnnotator implements Annotator {
     @Override
     public Annotation execute(PropertyBag ctx, byte[] data) throws AnnotatorException {
         this.initHashProvider(this.hash);
-        final String key = this.hashProvider.derive(data);
+        final String key = new String(data);
 
         final SourceCodeAnnotatorProps props = ctx.getProperty(
             AnnotationType.SourceCode.name(),

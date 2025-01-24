@@ -59,7 +59,7 @@ public class ChecksumAnnotator extends AbstractAnnotator implements Annotator {
     public Annotation execute(PropertyBag ctx, byte[] data) throws AnnotatorException {
         
         this.initHashProvider(this.hash);
-        final String key = this.hashProvider.derive(data);
+        final String key = new String(data);
 
         final ChecksumAnnotatorProps props = ctx.getProperty(
             AnnotationType.CHECKSUM.name(), 

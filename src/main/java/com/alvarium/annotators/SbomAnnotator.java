@@ -54,7 +54,7 @@ public class SbomAnnotator extends AbstractAnnotator implements Annotator {
 
   @Override
   public Annotation execute(PropertyBag ctx, byte[] data) throws AnnotatorException {
-    final String key = deriveHash(this.hash, data);
+    final String key = new String(data);
 
     String host = "";
     try {
